@@ -1,0 +1,35 @@
+name: API Drift Sentinel
+
+on:
+  pull_request:
+    paths:
+      - 'openapi.yaml'
+
+jobs:
+  contract-governance:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Checkout Base Branch Spec
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.base_ref }}
+          path: base-repo
+
+      - name: Checkout Head PR Branch Spec
+        uses: actions/checkout@v4
+        with:
+          path: head-repo
+
+      - name: Run API Drift Sentinel
+        uses: Turya-Kalburgi/api-drift-sentinel@v1.2.0
+        with:
+          base-spec: 'base-repo/openapi.yaml'
+          head-spec: 'head-repo/openapi.yaml'
+          fail-on-breaking: 'true'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          sentinel-endpoint: 'https://api-drift-sentinel-cloud.vercel.app/api/v1/events'
+          sentinel-token: 'sentinel_live_secret123'
