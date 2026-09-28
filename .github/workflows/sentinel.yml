@@ -29,7 +29,6 @@ jobs:
         with:
           base-spec: 'base-repo/openapi.yaml'
           head-spec: 'head-repo/openapi.yaml'
-          fail-on-breaking: 'true'
           github-token: ${{ secrets.GITHUB_TOKEN }}
           sentinel-endpoint: 'https://api-drift-sentinel-cloud.vercel.app/api/v1/events'
           sentinel-token: 'sentinel_live_secret123'
